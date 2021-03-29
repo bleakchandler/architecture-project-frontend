@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>FrontEnd app</title>
+    <link rel="stylesheet" href="index.css" />
+    <script defer type="text/javascript" src="./src/index.js"></script>
+  </head>
+  <body>
+    <h1>Architecture</h1>
+    <div id="sites"></div>
+
+    <div class="container">
+      <form class="add-site-form">
+      
+        <input
+          type="text"
+          name="name"
+          value=""
+          placeholder="Enter a site's name..."
+          class="input-text"
+        />
+        <br />
+        <input
+          type="text"
+          name="image"
+          value=""
+          placeholder="Enter a toy's image URL..."
+          class="input-text"
+        />
+        <br />
+        <input
+          type="submit"
+          name="submit"
+          value="Create New Site"
+          class="submit"
+        />
+      </form>
+
+  </div>
+  <p style="text-align:center">
+     <button id="new-site-btn">Add a new Site!</button>
+  </p>
+  </body>
+</html>
