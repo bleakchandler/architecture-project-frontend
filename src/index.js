@@ -2,6 +2,7 @@ let addSite = true;
 const updateSiteForm = document.querySelector('form#update-site-form')
 const newSiteForm = document.querySelector('form#create-site-form')
 const newItineraryForm = document.querySelector('form#new-itinerary-form')
+const itinerariesCollection = document.querySelector('div#itineraries')
 
 
 const url = "http://localhost:3000"
@@ -169,7 +170,7 @@ fetch(`${url}/itineraries/1`)
 
 
 function renderItinerary(itinerary) {
-  siteDiv = document.querySelector('div#sites')
+  siteDiv = document.querySelector('div#itineraries')
   itinerarySites = (itinerary.sites)
 
   // itinerarySites.forEach(function(element) { 
@@ -196,14 +197,26 @@ function renderItinerary(itinerary) {
 // deleteButton.textContent = "Delete Button"
 
 
-deleteItineraryButton.addEventListener
+itinerariesCollection.addEventListener
 ('click', event => {
-  const divID = event.target('div').dataset.id
-  fetch(`${url}/${divID}`, {
-  method: 'DELETE'
-  })
-  div.querySelector(`card[data-id='${divID}']`).remove()
-  console.log('deleted!')
+  if (event.target.matches('button.delete-btn')) {
+    fetch(`${url}/itineraries/1`, {
+    method: 'DELETE'
+    },
+    console.log('worked')
+  )}
 })
+
+
+
+// deleteItineraryButton.addEventListener
+// ('click', event => {
+//   const divID = event.target('div').dataset.id
+//   fetch(`${url}/${divID}`, {
+//   method: 'DELETE'
+//   })
+//   div.querySelector(`card[data-id='${divID}']`).remove()
+//   console.log('deleted!')
+// })
 
 
