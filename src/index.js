@@ -11,11 +11,11 @@ fetch(`${url}/users`).then(res => res.json()).then(users => {
     })
 })
 
-function renderUser(user) {
-    userDiv = document.querySelector('#users')
-    userHtml = `${user.name}`
-    userDiv.append(userHtml)
-}
+// function renderUser(user) {
+//     userDiv = document.querySelector('#users')
+//     userHtml = `${user.name}`
+//     userDiv.append(userHtml)
+// }
 
 fetch(`${url}/sites`).then(res => res.json()).then(sites => {
     sites.forEach(site => {
@@ -32,6 +32,7 @@ function renderSite(site) {
     div.innerHTML = `
     <h2>${site.name}</h2>
     <h3>${site.description}<h3>
+    <h4>${site.location}<h4>
     <img src=${site.photo_url} class="site.image" />`
    
     
@@ -169,15 +170,40 @@ fetch(`${url}/itineraries/1`)
 
 function renderItinerary(itinerary) {
   siteDiv = document.querySelector('div#sites')
+  itinerarySites = (itinerary.sites)
+
+  // itinerarySites.forEach(function(element) { 
+  //   div1 = document.createElement('div')
+  //   div1.innerHTML = `<h4>${element.name}</h4>`
+  //   siteDiv.append(div1)
+  // })
+
   div = document.createElement('div')
   div.dataset.id= itinerary.id
   div.classList.add('card')
-  div.innerHTML = `
-  <h2>${itinerary.name}</h2>
+  div.innerHTML = `<h2>${itinerary.name}</h2>
   <h3>${itinerary.description}</h3>
-  <img src=${itinerary.date} class="site.image" />`
-
-  console.log(itinerary_sites.first)
+  <h4>${itinerary.date}</h4>
+ 
+  <li><br>${itinerarySites.map(function(element) {return element.name} )}</br></li>
+  <button class="delete-btn">Delete</button>
+`
 
   siteDiv.append(div)
 }
+
+// const deleteButton = document.createElement('button')
+// deleteButton.textContent = "Delete Button"
+
+
+deleteItineraryButton.addEventListener
+('click', event => {
+  const divID = event.target('div').dataset.id
+  fetch(`${url}/${divID}`, {
+  method: 'DELETE'
+  })
+  div.querySelector(`card[data-id='${divID}']`).remove()
+  console.log('deleted!')
+})
+
+
