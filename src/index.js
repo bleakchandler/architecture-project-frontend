@@ -6,7 +6,10 @@ const itinerariesCollection = document.querySelector('div#itineraries')
 const updateItineraryForm = document.querySelector("form#update-itinerary-form")
 const users = document.querySelector('div#users')
 const userSignupForm = document.querySelector('form#user-signup-form')
+const userSignInForm = document.querySelector('form#user-sign-in-form')
 const url = "http://localhost:3000"
+const userInfo = document.querySelector('div#menu-bar')
+
 
 
 //// USERS ////
@@ -45,6 +48,42 @@ userSignupForm.addEventListener('submit', event => {
 })
 
 
+// user sign-in form
+userSignInForm.addEventListener('submit', event => {
+  event.preventDefault()
+  console.log('worked')
+  const userNameValue = event.target.name.value
+
+  userSignupValues = {
+    name: userNameValue
+  }
+
+  fetch(`${url}/users`)
+  .then(response => response.json())
+  .then(data => data.forEach( data => {
+    if (data.name == userNameValue) {
+      renderUser(data),
+      usersDiv.style.visibility = 'hidden',
+      sitesDiv.style.visibility = 'visible',
+      buttonsDiv.style.visibility = 'visible'
+    }
+  },
+
+
+  fetch(`${url}/itineraries`)
+  .then(response => response.json())
+  .then(data => {
+    data.forEach( data => {
+      if (data.user_id == userInfo.dataset.id) {
+       renderItinerary(data)
+      }
+    })
+  })
+
+  ))
+})
+
+
 // display user
 function renderUser(userName) {
   userDiv = document.querySelector('div#menu-bar')
@@ -59,10 +98,6 @@ function renderUser(userName) {
 
   userDiv.append(div)
 }
-
-
-
-
 
 
 //// SITES ////
@@ -82,6 +117,7 @@ function renderSite(site) {
   div = document.createElement('div')
   siteHtml = `${site.name}`
   div.dataset.id = site.id
+  div.id = "individual-site-card"
   div.classList.add('card')
   div.classList.add('banner')
   div.innerHTML = `
@@ -90,7 +126,12 @@ function renderSite(site) {
     <h4>${site.location}<h4>
     <img src=${site.photo_url} class="site.image" />`
 
+    const updateSiteButton = document.createElement('button')
+    updateSiteButton.textContent = "Update Site"
+    updateSiteButton.id = "update-site-button"
+    updateSiteButton.dataset.id = site.id
 
+  div.append(updateSiteButton)
   siteDiv.append(div)
 
 }
@@ -134,6 +175,9 @@ updateSiteForm.addEventListener('submit', event => {
     architectural_style: newStyle
   }
 
+  const cardID = (event.target.dataset.id)
+  console.log(cardID)
+
   fetch(`${url}/sites/1`, {
     method: 'PATCH',
     headers: {
@@ -141,6 +185,16 @@ updateSiteForm.addEventListener('submit', event => {
     },
     body: JSON.stringify(newSiteData)
   })
+
+  .then(response => response.json())
+  .then(data => {
+      const selectedCard = document.querySelector(`div#individual-site-card='${cardID}']`)
+      console.log(selectedCard)
+      const header = selectedCard.querySelector('h2')
+      const description = selectedCard.querySelector('h3')
+      header.textContent = data.name
+      description.textContent = data.description
+    })
 })
 
 // create new site
@@ -175,32 +229,9 @@ newSiteForm.addEventListener('submit', event => {
 
 
 
-
-
-
-
-
 //// ITINERARIES ////
 
-const userInfo = document.querySelector('div#menu-bar')
 
-
-// fetch all itineraries data
-// fetch(`${url}/itineraries`)
-// .then(response => response.json())
-// .then(data => {
-
-
-
-
-//   data.forEach(data => {
-//     if (data.id === userInfo.id) {
-
-//     console.log(data)}
-//   })
-// })
-
-// show hide itineraries forms upon click
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.querySelector("#show-itinerary-btn");
   const newItineraryContainer = document.querySelector(".itineraries");
@@ -211,31 +242,17 @@ document.addEventListener("DOMContentLoaded", () => {
   newItineraryContainer.style.display = "none";
   itineraryForms.style.display = "none";
 
+  
+
   addBtn.addEventListener("click", () => {
     // hide & seek with the form
-    fetch(`${url}/users`)
-      .then(response => response.json())
-      .then(data => {
-
-        data.forEach(function (user) {
-          // console.log(user)
-          // console.log(user.id)
-          // console.log(userInfo.dataset.id)
-
-          if (user.id == userInfo.dataset.id) {
-
-            const userItineraries = user.itineraries
-
-            userItineraries.forEach(function (data) { renderItinerary(data) })
-          }
-        })
-      })
+    
 
     addSite = !addSite;
     if (addSite) {
-      newItineraryContainer.style.display = "block";
-    } else {
       newItineraryContainer.style.display = "none";
+    } else {
+      newItineraryContainer.style.display = "block";
     }
   });
 });
@@ -248,7 +265,7 @@ newItineraryForm.addEventListener('submit', event => {
   itineraryName = event.target.name.value
   itineraryDescription = event.target.description.value
   itineraryDate = event.target.date.value
-  itineraryUserID = 1
+  itineraryUserID = userInfo.dataset.id
 
   newSiteData = {
     name: itineraryName,
@@ -290,9 +307,12 @@ function renderItinerary(itinerary) {
   div.dataset.id = itinerary.id
   div.classList.add('card')
   div.innerHTML = `<h2>${itinerary.name}</h2>
-  <h3>${itinerary.description} <br>
-  ${itinerary.date}</h3>
-  <li><br>${itinerarySites.forEach(function (element) { return element.name })}</br></li> 
+  <br>
+  <h3>Description: ${itinerary.description}
+  <br>
+  <br>
+  Date: ${itinerary.date}
+  </h3>
 `
 
 
