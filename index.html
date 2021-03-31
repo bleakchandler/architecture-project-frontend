@@ -16,11 +16,12 @@
   </p>
 
 <p style="text-align:center">
-   <button id="new-itinerary-btn">Show Itineraries</button>
+   <button id="show-itinerary-btn">Show Itineraries</button>
 </p>
 </div>
 
-<div class="forms">
+<div class="site-forms">
+
   <form id="update-site-form">
   
     <input
@@ -74,8 +75,6 @@
       class="submit"
     />
   </form>
-
-
 
   <form id="create-site-form">
   
@@ -133,43 +132,8 @@
 
 </div>
 
-<div class="itineraries">
-  <div id="itineraries"></div>
-  <form id="new-itinerary-form">
-
-    <input
-      type="text"
-      name="name"
-      value=""
-      placeholder="Name your itinerary"
-      class="input-text"
-    />
-    <br />
-    <input
-      type="text"
-      name="date"
-      value=""
-      placeholder="Select a date"
-      class="input-text"
-    />
-
-    <br />
-    <input
-      type="text"
-      name="description"
-      value=""
-      placeholder="Enter a description"
-      class="input-text"
-    />
-
-    <br />
-    <input
-      type="submit"
-      name="submit"
-      value="Create New Itinerary"
-      class="submit"
-    />
-  </form>
+<div class="update-itinerary-forms">
+  
 
 
   <form id="update-itinerary-form">
@@ -210,7 +174,49 @@
 
 </div>
 
+<div class="itineraries">
+  
+  <form id="new-itinerary-form">
+
+    <input
+      type="text"
+      name="name"
+      value=""
+      placeholder="Name your itinerary"
+      class="input-text"
+    />
+    <br />
+    <input
+      type="text"
+      name="date"
+      value=""
+      placeholder="Select a date"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="text"
+      name="description"
+      value=""
+      placeholder="Enter a description"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="submit"
+      name="submit"
+      value="Create New Itinerary"
+      class="submit"
+    />
+  </form>
+  <div id="itineraries"></div>
+
+</div>
+
 <div id="sites">
+
 </div>
     
 </body>
