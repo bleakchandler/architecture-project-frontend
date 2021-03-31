@@ -1,22 +1,13 @@
 let addSite = true;
 const updateSiteForm = document.querySelector('form#update-site-form')
 const newSiteForm = document.querySelector('form#create-site-form')
-const newItineraryForm = document.querySelector('form#new-itinerary-form')
+const newItineraryForm = document.querySelector('form#itineraries')
 const itinerariesCollection = document.querySelector('div#itineraries')
 
 
 const url = "http://localhost:3000"
-fetch(`${url}/users`).then(res => res.json()).then(users => {
-    users.forEach(user => {
-        renderUser(user)
-    })
-})
 
-// function renderUser(user) {
-//     userDiv = document.querySelector('#users')
-//     userHtml = `${user.name}`
-//     userDiv.append(userHtml)
-// }
+
 
 fetch(`${url}/sites`).then(res => res.json()).then(sites => {
     sites.forEach(site => {
@@ -45,7 +36,7 @@ function renderSite(site) {
 
 document.addEventListener("DOMContentLoaded", () => {
     const addBtn = document.querySelector("#new-site-btn");
-     const siteFormContainer = document.querySelector(".container");
+     const siteFormContainer = document.querySelector(".forms");
 
      siteFormContainer.style.display = "none"
      
@@ -120,9 +111,27 @@ newSiteForm.addEventListener('submit', event => {
 
 
 
+
+
+
+
+
+
+//// ITINERARIES ////
+
+// fetch all itineraries data
+fetch(`${url}/itineraries`)
+.then(response => response.json())
+.then(data => {
+  data.forEach(data => {
+    renderItinerary(data)
+  })
+})
+
+// show hide itineraries forms upon click
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.querySelector("#new-itinerary-btn");
-   const newItineraryContainer = document.querySelector(".new-itinerary");
+   const newItineraryContainer = document.querySelector(".itineraries");
 
    newItineraryContainer.style.display = "none";
 
@@ -137,8 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
    });
  });
 
-
-
+// form to add new itinerary
 newItineraryForm.addEventListener('submit', event => {  
   event.preventDefault()
 
@@ -164,59 +172,70 @@ newItineraryForm.addEventListener('submit', event => {
 })
 
 
-fetch(`${url}/itineraries/1`)
-.then(response => response.json())
-.then(data => renderItinerary(data))
-
-
+// function to render itinerary
 function renderItinerary(itinerary) {
-  siteDiv = document.querySelector('div#itineraries')
+  itineraryDiv = document.querySelector('div#itineraries')
   itinerarySites = (itinerary.sites)
 
-  // itinerarySites.forEach(function(element) { 
-  //   div1 = document.createElement('div')
-  //   div1.innerHTML = `<h4>${element.name}</h4>`
-  //   siteDiv.append(div1)
-  // })
 
   div = document.createElement('div')
+  updateButton = document.createElement('button')
+  updateButton.textContent = "Update Itinerary"
+  updateButton.id = "update-itinerary-button"
   div.dataset.id= itinerary.id
   div.classList.add('card')
   div.innerHTML = `<h2>${itinerary.name}</h2>
-  <h3>${itinerary.description}</h3>
-  <h4>${itinerary.date}</h4>
- 
-  <li><br>${itinerarySites.map(function(element) {return element.name} )}</br></li>
-  <button class="delete-btn">Delete</button>
+  <h3>${itinerary.description} <br>
+  ${itinerary.date}</h3>
+  <li><br>${itinerarySites.forEach(function(element) {return element.name} )}</br></li> 
 `
+  
 
-  siteDiv.append(div)
+// function to show itinerary sites within the itinerary
+itinerarySites.forEach(function(element) {
+  const siteName = document.createElement('li')
+  const deleteSiteButton = document.createElement('button')
+  const siteImage = document.createElement('img')
+
+  siteName.innerHTML = element.name
+  siteName.dataset.id = element.id
+
+  deleteSiteButton.textContent = "Delete"
+  deleteSiteButton.id = "itinerary-site-delete-button"
+  deleteSiteButton.dataset.id = element.id
+
+  siteImage.src = element.photo_url
+
+  div.append(siteName)
+  // div.append(siteImage)
+  siteName.append(deleteSiteButton)
+
+})
+  itineraryDiv.append(div)
+  div.append(updateButton)
 }
 
-// const deleteButton = document.createElement('button')
-// deleteButton.textContent = "Delete Button"
-
-
+// delete specific site
 itinerariesCollection.addEventListener
 ('click', event => {
-  if (event.target.matches('button.delete-btn')) {
-    fetch(`${url}/itineraries/1`, {
-    method: 'DELETE'
-    },
-    console.log('worked')
-  )}
+  if (event.target.matches('button#itinerary-site-delete-button')) {
+
+    fetch(`${url}/itinerary_sites/${event.target.dataset.id}`,{
+      method: 'DELETE',
+  })
+  
+  renderItinerary(data)
+  console.log(event.target.dataset.id)
+  
+  }
+
+// open update form
+else if (event.target.matches('button#update-itinerary-button')) {
+console.log('clicked')
+  
+
+}
 })
 
-
-
-// deleteItineraryButton.addEventListener
-// ('click', event => {
-//   const divID = event.target('div').dataset.id
-//   fetch(`${url}/${divID}`, {
-//   method: 'DELETE'
-//   })
-//   div.querySelector(`card[data-id='${divID}']`).remove()
-//   console.log('deleted!')
-// })
 
 

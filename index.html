@@ -7,171 +7,211 @@
     <script defer type="text/javascript" src="./src/index.js"></script>
   </head>
   <body>
-    <h1>Architecture</h1>
-    <div id="sites"></div>
+    <h1>NYC Architecture</h1>
 
-    <div id="itineraries"></div>
+<div id="buttons">
 
-    <div class="container">
-      <form id="update-site-form">
-      
-        <input
-          type="text"
-          name="name"
-          value=""
-          placeholder="Enter a site's name..."
-          class="input-text"
-        />
-        <br />
-        <input
-          type="text"
-          name="photoUrl"
-          value=""
-          placeholder="Enter an image URL..."
-          class="input-text"
-        />
-
-        <br />
-        <input
-          type="text"
-          name="description"
-          value=""
-          placeholder="Enter a description"
-          class="input-text"
-        />
-
-        <br />
-        <input
-          type="text"
-          name="location"
-          value=""
-          placeholder="Enter a new location"
-          class="input-text"
-        />
-
-        <br />
-        <input
-          type="text"
-          name="style"
-          value=""
-          placeholder="Enter a new style"
-          class="input-text"
-        />
-
-        <br />
-        <input
-          type="submit"
-          name="submit"
-          value="Update Site"
-          class="submit"
-        />
-      </form>
-
-
-
-      <form id="create-site-form">
-      
-        <input
-          type="text"
-          name="name"
-          value=""
-          placeholder="Enter a site's name..."
-          class="input-text"
-        />
-        <br />
-        <input
-          type="text"
-          name="photoUrl"
-          value=""
-          placeholder="Enter an image URL..."
-          class="input-text"
-        />
-
-        <br />
-        <input
-          type="text"
-          name="description"
-          value=""
-          placeholder="Enter a description"
-          class="input-text"
-        />
-
-        <br />
-        <input
-          type="text"
-          name="location"
-          value=""
-          placeholder="Enter a new location"
-          class="input-text"
-        />
-
-        <br />
-        <input
-          type="text"
-          name="style"
-          value=""
-          placeholder="Enter a new style"
-          class="input-text"
-        />
-
-        <br />
-        <input
-          type="submit"
-          name="submit"
-          value="Create New Site"
-          class="submit"
-        />
-      </form>
-
-    </div>
-
-    <div class="new-itinerary">
-        <form id="new-itinerary-form">
-  
-          <input
-            type="text"
-            name="name"
-            value=""
-            placeholder="Name your itinerary"
-            class="input-text"
-          />
-          <br />
-          <input
-            type="text"
-            name="date"
-            value=""
-            placeholder="Select a date"
-            class="input-text"
-          />
-  
-          <br />
-          <input
-            type="text"
-            name="description"
-            value=""
-            placeholder="Enter a description"
-            class="input-text"
-          />
-  
-          <br />
-          <input
-            type="submit"
-            name="submit"
-            value="Create New Itinerary"
-            class="submit"
-          />
-        </form>
-
-
-  </div>
   <p style="text-align:center">
-     <button id="new-site-btn">Add a new Site!</button>
+     <button id="new-site-btn">Add a New Site</button>
   </p>
 
-</div>
 <p style="text-align:center">
-   <button id="new-itinerary-btn">Create an Itinerary!</button>
+   <button id="new-itinerary-btn">Show Itineraries</button>
 </p>
+</div>
 
-  </body>
+<div class="forms">
+  <form id="update-site-form">
+  
+    <input
+      type="text"
+      name="name"
+      value=""
+      placeholder="Enter a site's name..."
+      class="input-text"
+    />
+    <br />
+    <input
+      type="text"
+      name="photoUrl"
+      value=""
+      placeholder="Enter an image URL..."
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="text"
+      name="description"
+      value=""
+      placeholder="Enter a description"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="text"
+      name="location"
+      value=""
+      placeholder="Enter a new location"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="text"
+      name="style"
+      value=""
+      placeholder="Enter a new style"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="submit"
+      name="submit"
+      value="Update Site"
+      class="submit"
+    />
+  </form>
+
+
+
+  <form id="create-site-form">
+  
+    <input
+      type="text"
+      name="name"
+      value=""
+      placeholder="Enter a site's name..."
+      class="input-text"
+    />
+    <br />
+    <input
+      type="text"
+      name="photoUrl"
+      value=""
+      placeholder="Enter an image URL..."
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="text"
+      name="description"
+      value=""
+      placeholder="Enter a description"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="text"
+      name="location"
+      value=""
+      placeholder="Enter a new location"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="text"
+      name="style"
+      value=""
+      placeholder="Enter a new style"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="submit"
+      name="submit"
+      value="Create New Site"
+      class="submit"
+    />
+  </form>
+
+</div>
+
+<div class="itineraries">
+  <div id="itineraries"></div>
+  <form id="new-itinerary-form">
+
+    <input
+      type="text"
+      name="name"
+      value=""
+      placeholder="Name your itinerary"
+      class="input-text"
+    />
+    <br />
+    <input
+      type="text"
+      name="date"
+      value=""
+      placeholder="Select a date"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="text"
+      name="description"
+      value=""
+      placeholder="Enter a description"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="submit"
+      name="submit"
+      value="Create New Itinerary"
+      class="submit"
+    />
+  </form>
+
+
+  <form id="update-itinerary-form">
+
+    <input
+      type="text"
+      name="name"
+      value=""
+      placeholder="Name your itinerary"
+      class="input-text"
+    />
+    <br />
+    <input
+      type="text"
+      name="date"
+      value=""
+      placeholder="Select a date"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="text"
+      name="description"
+      value=""
+      placeholder="Enter a description"
+      class="input-text"
+    />
+
+    <br />
+    <input
+      type="submit"
+      name="submit"
+      value="Update Itinerary"
+      class="submit"
+    />
+  </form>
+
+</div>
+
+<div id="sites">
+</div>
+    
+</body>
 </html>
