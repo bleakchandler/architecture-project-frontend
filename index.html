@@ -3,14 +3,96 @@
   <head>
     <meta charset="utf-8" />
     <title>FrontEnd app</title>
+    <div class="slider_wrapper">
+			<div id="camera_wrap" class="camera_wrap" style="display: block; height: 1231px;"><div class="camera_fakehover"><div class="camera_src camerastarted">
+				<div data-src="https://media.architecturaldigest.com/photos/5ca64b65409e480bfa72a551/master/w_1600%2Cc_limit/02_The%2520Shed_Photography%2520by%2520Iwan%2520Baan.jpg">
+					
+				</div>
+				<div data-src="https://media.architecturaldigest.com/photos/580fd2f0ef29aecc140f18ef/master/w_1600%2Cc_limit/GettyImages-672094523.jpg">
+					
+				</div>
+				<div data-src="https://media.architecturaldigest.com/photos/59b2b3d7922511310f4e4675/master/w_1600%2Cc_limit/Jane's%2520Carousel.jpg" >
+					
+        </div>
+        <div class="camera_prev"><span></span></div>
+        <div class="camera_next"><span></span></div>
+			</div><div class="camera_target"><div class="cameraCont"><div class="cameraSlide cameraSlide_0" style="visibility: visible; display: none; z-index: 1;"><img src="https://media.architecturaldigest.com/photos/580fd2f0ef29aecc140f18ef/master/w_1600%2Cc_limit/GettyImages-672094523.jpg", class="imgLoaded" data-alignment="" data-portrait="" width="2050" height="992" style="visibility: visible; height: 1231.53px; margin-left: 0px; margin-top: 0px; position: absolute; width: 2545px;"><div class="camerarelative" style="width: 2545px; height: 1231px;"></div></div><div class="cameraSlide cameraSlide_1" style="display: none; z-index: 1;"><img src="https://media.architecturaldigest.com/photos/59b2b3d7922511310f4e4675/master/w_1600%2Cc_limit/Jane's%2520Carousel.jpg" class="imgLoaded" data-alignment="" data-portrait="" width="1600" height="774" style="visibility: visible; height: 1231.14px; margin-left: 0px; margin-top: 0px; position: absolute; width: 2545px;"><div class="camerarelative" style="width: 2545px; height: 1231px;"></div></div><div class="cameraSlide cameraSlide_2 cameracurrent" style="display: block; z-index: 999;"><img src="https://media.architecturaldigest.com/photos/5ca64b65409e480bfa72a551/master/w_1600%2Cc_limit/02_The%2520Shed_Photography%2520by%2520Iwan%2520Baan.jpg" class="imgLoaded" data-alignment="" data-portrait="" width="1600" height="774" style="visibility: visible; height: 1231.14px; margin-left: 0px; margin-top: 0px; position: absolute; width: 2545px;"><div class="camerarelative" style="width: 2545px; height: 1231px;"></div></div><div class="cameraSlide cameraSlide_3 cameranext" style="z-index: 1; display: none;"><div class="camerarelative" style="width: 2545px; height: 1231px;"></div></div></div></div><div class="camera_overlayer"></div><div class="camera_target_content"><div class="cameraContents"><div class="cameraContent" style="display: none;"><div class="caption fadeIn" style="visibility: hidden; opacity: 1;">
+						<h2>LONDON</h2>
+						<div class="price">
+							FROM
+							<span>$1000</span>
+						</div>
+						<a href="#">LEARN MORE</a>
+					</div></div><div class="cameraContent" style="display: none;"><div class="caption fadeIn" style="visibility: hidden; opacity: 1;">
+						<h2>Maldives</h2>
+						<div class="price">
+							FROM
+							<span>$2000</span>
+						</div>
+						<a href="#">LEARN MORE</a>
+					</div></div><div class="cameraContent cameracurrent" style="display: block;"><div class="caption fadeIn" style="visibility: visible; opacity: 1;">
+						<h2>Venice</h2>
+						<div class="price">
+							FROM
+							<span>$1600</span>
+						</div>
+						<a href="#">LEARN MORE</a>
+					</div></div></div></div><div class="camera_bar" style="display: none; top: auto; height: 7px;"><span class="camera_bar_cont" style="opacity: 0.8; position: absolute; inset: 0px; background-color: rgb(34, 34, 34);"><span id="pie_0" style="opacity: 0.8; position: absolute; background-color: rgb(238, 238, 238); inset: 2px 0px; display: block;"></span></span></div><div class="camera_commands"><div class="camera_play" style="display: none;"></div><div class="camera_stop" style="display: block;"></div></div><div class="camera_prev"><span></span></div><div class="camera_next"><span></span></div></div><div class="camera_loader" style="display: none; visibility: visible;"></div></div>
+    </div>
+    
     <link rel="stylesheet" href="index.css" />
     <script defer type="text/javascript" src="./src/index.js"></script>
+    <script defer type="text/javascript" src="./src/trip.js"></script>
+
+    <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
   </head>
   <body>
     <h1>Architecture</h1>
+    <div id="itineraries"></div>
     <div id="sites"></div>
 
     <div id="itineraries"></div>
+    <form id="update-itinerary-form">
+      
+      <input
+        type="text"
+        name="name"
+        value=""
+        placeholder="Enter a site's name..."
+        class="input-text"
+      />
+
+      <br />
+      <input
+        type="text"
+        name="description"
+        value=""
+        placeholder="Enter a description"
+        class="input-text"
+      />
+
+      <br />
+      <input
+        type="text"
+        name="date"
+        value=""
+        placeholder="Enter a new date"
+        class="input-text"
+      />
+
+      <br />
+      <input
+        type="submit"
+        name="submit"
+        value="Update Site"
+        class="submit"
+      />
+    </form>
+
 
     <div class="container">
       <form id="update-site-form">
@@ -175,3 +257,5 @@
 
   </body>
 </html>
+
+

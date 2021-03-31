@@ -3,14 +3,14 @@ const updateSiteForm = document.querySelector('form#update-site-form')
 const newSiteForm = document.querySelector('form#create-site-form')
 const newItineraryForm = document.querySelector('form#new-itinerary-form')
 const itinerariesCollection = document.querySelector('div#itineraries')
-
+const updateItineraryForm = document.querySelector("form#update-itinerary-form")
 
 const url = "http://localhost:3000"
-fetch(`${url}/users`).then(res => res.json()).then(users => {
-    users.forEach(user => {
-        renderUser(user)
-    })
-})
+// fetch(`${url}/users`).then(res => res.json()).then(users => {
+//     users.forEach(user => {
+//         renderUser(user)
+//     })
+// })
 
 // function renderUser(user) {
 //     userDiv = document.querySelector('#users')
@@ -18,7 +18,9 @@ fetch(`${url}/users`).then(res => res.json()).then(users => {
 //     userDiv.append(userHtml)
 // }
 
-fetch(`${url}/sites`).then(res => res.json()).then(sites => {
+fetch(`${url}/sites`)
+  .then(res => res.json())
+  .then(sites => {
     sites.forEach(site => {
         renderSite(site)
     })
@@ -30,6 +32,7 @@ function renderSite(site) {
     siteHtml = `${site.name}`
     div.dataset.id= site.id
     div.classList.add('card')
+    div.classList.add('banner')
     div.innerHTML = `
     <h2>${site.name}</h2>
     <h3>${site.description}<h3>
@@ -164,9 +167,13 @@ newItineraryForm.addEventListener('submit', event => {
 })
 
 
-fetch(`${url}/itineraries/1`)
+fetch(`${url}/itineraries`)
 .then(response => response.json())
-.then(data => renderItinerary(data))
+.then(data => {
+  data.forEach(itinerary => {
+    renderItinerary(itinerary)
+  })
+})
 
 
 function renderItinerary(itinerary) {
@@ -187,20 +194,20 @@ function renderItinerary(itinerary) {
   <h4>${itinerary.date}</h4>
  
   <li><br>${itinerarySites.map(function(element) {return element.name} )}</br></li>
-  <button class="delete-btn">Delete</button>
-`
+  <button class="delete-btn" data-id="${itinerary.id}">Delete</button>`
 
   siteDiv.append(div)
 }
 
-// const deleteButton = document.createElement('button')
-// deleteButton.textContent = "Delete Button"
+const deleteButton = document.createElement('button')
+deleteButton.textContent = "Delete Button"
 
 
 itinerariesCollection.addEventListener
 ('click', event => {
+  
   if (event.target.matches('button.delete-btn')) {
-    fetch(`${url}/itineraries/1`, {
+    fetch(`${url}/itineraries/${event.target.getAttribute("data-id")}`, {
     method: 'DELETE'
     },
     console.log('worked')
@@ -220,3 +227,28 @@ itinerariesCollection.addEventListener
 // })
 
 
+
+updateItineraryForm.addEventListener('submit', event => {  
+  event.preventDefault()
+
+  //gives internal server error but still works?
+
+  updateName = event.target.name.value
+  updateDescription = event.target.description.value
+  updateDate = event.target.date.value
+
+  newItineraryData = {
+    name: updateName,
+    description: updateDescription,
+    date: updateDate
+    
+  }
+
+  fetch(`${url}/itineraries/1`, {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(newItineraryData)
+  })
+})
