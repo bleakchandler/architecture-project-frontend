@@ -46,7 +46,6 @@ userSignupForm.addEventListener('submit', event => {
 // user sign-in form
 userSignInForm.addEventListener('submit', event => {
   event.preventDefault()
-  console.log('worked')
   const userNameValue = event.target.name.value
 
   userSignupValues = {
@@ -89,7 +88,6 @@ function renderUser(userName) {
 }
 
 //// SITES ////
-
 // fetch site date
 fetch(`${url}/sites`)
   .then(response => response.json())
@@ -267,8 +265,24 @@ allSitesCollection.addEventListener
         newItineraryContainer.style.display = "block";
       }
     }
-  })
 
+    // add site to itinerary from dropdown
+    else if (event.target.matches('button#add-site-to-itinerary-button')) {
+      console.log('worked!')
+      var closest = element.closest("#individual-site-card > listdiv > select");
+      console.log(closest)
+    
+
+      // using the dataset id, we fetch the info required to fill in the update itinerary form
+      // fetch(`${url}/itineraries/${event.target.select.value}`, {
+      //   method: 'PATCH',
+      //   headers: {
+      //     'Content-type': 'application/json'
+      //   },
+      //   body: JSON.stringify(newSite)
+      // })
+    }
+  })
 
 //// ITINERARIES ////
 document.addEventListener("DOMContentLoaded", () => {
@@ -337,21 +351,6 @@ function renderItinerary(itinerary) {
   itineraryDiv = document.querySelector('div#itineraries')
   itinerarySites = (itinerary.sites)
 
-  // create drop down
-  listDiv = document.createElement('listDiv')
-  select = document.createElement("select");
-
-  fetch(`${url}/sites`)
-    .then(res => res.json())
-    .then(sites => {
-      sites.forEach(site => {
-        let option = document.createElement('option')
-        option.textContent = site.name
-        select.append(option)
-      })
-      listDiv.append(select);
-    })
-
   div = document.createElement('div')
   div.id = "itinerary-card"
 
@@ -365,11 +364,6 @@ function renderItinerary(itinerary) {
   deleteCardButton.id = "delete-itinerary-card-button"
   deleteCardButton.dataset.id = itinerary.id
 
-  const addSiteFromDropdownButton = document.createElement('button')
-  addSiteFromDropdownButton.textContent = "Add Site To Itinerary"
-  addSiteFromDropdownButton.id = "add-site-from-dropdown-button"
-  addSiteFromDropdownButton.dataset.id = itinerary.id
-
   div.dataset.id = itinerary.id
   div.classList.add('card')
   div.innerHTML = `
@@ -377,7 +371,6 @@ function renderItinerary(itinerary) {
   <h3>Description: ${itinerary.description}</h3>
   <h4> Date: ${itinerary.date} </h4>
 `
-
   // function to show itinerary sites within the itinerary
   itinerarySites.forEach(function (element) {
     const siteName = document.createElement('li')
@@ -386,22 +379,17 @@ function renderItinerary(itinerary) {
 
     siteName.innerHTML = element.name
     siteName.dataset.id = element.id
-
     deleteSiteButton.textContent = "Delete"
     deleteSiteButton.id = "itinerary-site-delete-button"
     deleteSiteButton.dataset.id = element.id
-
     siteImage.src = element.photo_url
 
     div.append(siteName)
     siteName.append(deleteSiteButton)
-
   })
   itineraryDiv.append(div)
   div.append(updateButton)
   div.append(deleteCardButton)
-  div.append(listDiv)
-  div.append(addSiteFromDropdownButton)
 }
 
 // delete specific site
@@ -452,23 +440,6 @@ itinerariesCollection.addEventListener
       console.log(event.target.dataset.id)
       fetch(`${url}/itineraries/${event.target.dataset.id}`, {
         method: 'DELETE'
-      },
-      )
-    }
-
-    else if (event.target.matches('button#add-site-from-dropdown-button')) {
-
-      var closestElement = targetElement.closest('#listDiv');
-      console.log(closestElement)
-      const newSite = { name: "test" }
-
-      // using the dataset id, we fetch the info required to fill in the update itinerary form
-      fetch(`${url}/itineraries/${event.target.select.value}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify(newSite)
       })
     }
   })
