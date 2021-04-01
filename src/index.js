@@ -145,7 +145,6 @@ updateSiteForm.addEventListener('submit', event => {
     },
     body: JSON.stringify(newSiteData)
   })
-
     .then(response => response.json())
     .then(data => {
       const selectedCard = document.querySelector(`div#individual-site-card[data-id='${cardID}']`)
@@ -211,22 +210,18 @@ function renderSite(site) {
     <h5>${site.architectural_style}</h5>
     `
 
-  select = document.createElement("select");
-
+  let select = document.createElement("SELECT");
   fetch(`${url}/itineraries`)
     .then(res => res.json())
     .then(itinerary => {
       itinerary.forEach(itinerary => {
-        console.log(itinerary.name)
-        let option = document.createElement('option')
-        option.textContent = itinerary.name
-        console.log(option)
-        select.appendChild(option)
+        var option = document.createElement("option");
+        option.text = itinerary.name
+        select.add(option)
       })
     })
 
   listDiv.append(select);
-  console.log(listDiv)
 
   const updateSiteButton = document.createElement('button')
   updateSiteButton.textContent = "Update Site"
@@ -421,7 +416,6 @@ itinerariesCollection.addEventListener
       fetch(`${url}/itinerary_sites/${event.target.dataset.id}`, {
         method: 'DELETE',
       })
-      console.log('worked!')
     }
 
     // open update form
