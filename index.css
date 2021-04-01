@@ -48,7 +48,11 @@ form {
   display: inline-block;
 }
 
-
+/* updateItineraryForm[0].src = data.photo_url
+          updateItineraryForm[1].value = data.name
+          updateItineraryForm[2].value = data.date
+          updateItineraryForm[3].value = data.description
+          updateItineraryForm[4].value = data.architectural_style */
 
 
 /* Add a black background color to the top navigation */

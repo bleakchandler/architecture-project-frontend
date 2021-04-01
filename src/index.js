@@ -188,16 +188,16 @@ updateSiteForm.addEventListener('submit', event => {
   .then(data => {
       const selectedCard = document.querySelector(`div#individual-site-card[data-id='${cardID}']`)
       console.log(selectedCard)
-      const header = selectedCard.querySelector('h2')
+      const name = selectedCard.querySelector('h2')
       const description = selectedCard.querySelector('h3')
       const location = selectedCard.querySelector('h4')
       const style = selectedCard.querySelector('h5')
-      const photo = selectedCard.querySelector('h6')
-      header.textContent = data.name
+      const photo = selectedCard.querySelector('img')
+      name.textContent = data.name
       description.textContent = data.description
       location.textContent = data.location
       style.textContent = data.architectural_style
-      photo.textContent = data.photo_url
+      photo.src = data.photo_url
     })
 })
 
@@ -286,12 +286,11 @@ function renderSite(site) {
     div.classList.add('card')
     div.classList.add('banner')
     div.innerHTML = `
-    <img src=${site.photo_url}/>
+      <img src=${site.photo_url}/>
       <h2>${site.name}</h2>
-      <h3>${site.description}<h3>
-      <h4>${site.location}<h4>
-      <h5>${site.architectural_style}<h5>
-      
+      <h3>${site.description}</h3>
+      <h4>${site.location}</h4>
+      <h5>${site.architectural_style}</h5>
       `
   
   select = document.createElement("select");
@@ -464,7 +463,7 @@ function renderItinerary(itinerary) {
 
   <h3>Description: ${itinerary.description}</h3>
 
-  <h4> Date: ${itinerary.date} </h3>
+  <h4> Date: ${itinerary.date} </h4>
  
 `
 
@@ -522,6 +521,7 @@ itinerariesCollection.addEventListener
       fetch(`${url}/itineraries/${event.target.dataset.id}`)
         .then(response => response.json())
         .then(data => {
+
           updateItineraryForm[0].value = data.name
           updateItineraryForm[1].value = data.date
           updateItineraryForm[2].value = data.description
