@@ -4,11 +4,17 @@ const newSiteForm = document.querySelector('form#create-site-form')
 const newItineraryForm = document.querySelector('form#new-itinerary-form')
 const itinerariesCollection = document.querySelector('div#itineraries')
 const updateItineraryForm = document.querySelector("form#update-itinerary-form")
-const users = document.querySelector('div#users')
+const users = document.querySelector('.users')
 const userSignupForm = document.querySelector('form#user-signup-form')
 const userSignInForm = document.querySelector('form#user-sign-in-form')
 const url = "http://localhost:3000"
-const userInfo = document.querySelector('div#menu-bar')
+const userInfo = document.querySelector('div#myTopnav')
+const allSitesCollection = document.querySelector('div#sites')
+
+const siteUpdateFormContainer = document.querySelector('body > div.update-site-forms')
+const newSiteFormContainer = document.querySelector('body > div.new-site-form')
+
+
 
 
 
@@ -18,10 +24,10 @@ const userInfo = document.querySelector('div#menu-bar')
 // hide all elements
 const sitesDiv = document.querySelector('div#sites')
 const buttonsDiv = document.querySelector('div#buttons')
-const usersDiv = document.querySelector('div#users')
+const usersDiv = document.querySelector('.users')
+
 
 sitesDiv.style.visibility = 'hidden';
-buttonsDiv.style.visibility = 'hidden';
 
 
 // signup form event listener
@@ -42,9 +48,8 @@ userSignupForm.addEventListener('submit', event => {
   })
     .then(response => response.json())
     .then(data => renderUser(data),
-      usersDiv.style.visibility = 'hidden',
-      sitesDiv.style.visibility = 'visible',
-      buttonsDiv.style.visibility = 'visible')
+    usersDiv.style.visibility = 'hidden',
+    sitesDiv.style.visibility = 'visible')
 })
 
 
@@ -64,8 +69,8 @@ userSignInForm.addEventListener('submit', event => {
     if (data.name == userNameValue) {
       renderUser(data),
       usersDiv.style.visibility = 'hidden',
-      sitesDiv.style.visibility = 'visible',
-      buttonsDiv.style.visibility = 'visible'
+      sitesDiv.style.visibility = 'visible'
+      
     }
   },
 
@@ -79,14 +84,13 @@ userSignInForm.addEventListener('submit', event => {
       }
     })
   })
-
   ))
 })
 
 
 // display user
 function renderUser(userName) {
-  userDiv = document.querySelector('div#menu-bar')
+  userDiv = document.querySelector('div#myTopnav')
   div = document.createElement('div')
 
   displayUser = document.createElement('p')
@@ -96,60 +100,54 @@ function renderUser(userName) {
 
   div.innerHTML = `Welcome, ${displayUser}`
 
-  userDiv.append(div)
+  displayUser.app
+
+  // userDiv.append(div)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //// SITES ////
 
 // fetch site date
+
+
 fetch(`${url}/sites`)
-  .then(res => res.json())
-  .then(sites => {
-    sites.forEach(site => {
-      renderSite(site)
-    })
+.then(response => response.json())
+.then(sites => {
+  sites.forEach(data => {
+    renderSite(data)
   })
+}) 
 
-// function to render sites
-function renderSite(site) {
-  siteDiv = document.querySelector('div#sites')
-  div = document.createElement('div')
-  siteHtml = `${site.name}`
-  div.dataset.id = site.id
-  div.id = "individual-site-card"
-  div.classList.add('card')
-  div.classList.add('banner')
-  div.innerHTML = `
-    <h2>${site.name}</h2>
-    <h3>${site.description}<h3>
-    <h4>${site.location}<h4>
-    <img src=${site.photo_url} class="site.image" />`
-
-    const updateSiteButton = document.createElement('button')
-    updateSiteButton.textContent = "Update Site"
-    updateSiteButton.id = "update-site-button"
-    updateSiteButton.dataset.id = site.id
-
-  div.append(updateSiteButton)
-  siteDiv.append(div)
-
-}
 
 // hide/show site forms
 document.addEventListener("DOMContentLoaded", () => {
-  const addBtn = document.querySelector("#new-site-btn");
-  const siteFormContainer = document.querySelector(".site-forms");
+  const addBtn = document.querySelector("#myTopnav > a:nth-child(3)");
+  const siteFormContainer = document.querySelector(".new-site-form");
 
-  siteFormContainer.style.display = "none"
+  // siteFormContainer.style.display = "none"
 
   addBtn.addEventListener("click", () => {
     // hide & seek with the form
     addSite = !addSite;
     if (addSite) {
-      siteFormContainer.style.display = "block";
-    } else {
       siteFormContainer.style.display = "none";
+    } else {
+      siteFormContainer.style.display = "block";
     }
   });
 });
@@ -178,7 +176,7 @@ updateSiteForm.addEventListener('submit', event => {
   const cardID = (event.target.dataset.id)
   console.log(cardID)
 
-  fetch(`${url}/sites/1`, {
+  fetch(`${url}/sites/${cardID}`, {
     method: 'PATCH',
     headers: {
       'Content-type': 'application/json'
@@ -188,12 +186,18 @@ updateSiteForm.addEventListener('submit', event => {
 
   .then(response => response.json())
   .then(data => {
-      const selectedCard = document.querySelector(`div#individual-site-card='${cardID}']`)
+      const selectedCard = document.querySelector(`div#individual-site-card[data-id='${cardID}']`)
       console.log(selectedCard)
       const header = selectedCard.querySelector('h2')
       const description = selectedCard.querySelector('h3')
+      const location = selectedCard.querySelector('h4')
+      const style = selectedCard.querySelector('h5')
+      const photo = selectedCard.querySelector('h6')
       header.textContent = data.name
       description.textContent = data.description
+      location.textContent = data.location
+      style.textContent = data.architectural_style
+      photo.textContent = data.photo_url
     })
 })
 
@@ -216,6 +220,8 @@ newSiteForm.addEventListener('submit', event => {
     architectural_style: newStyle
   }
 
+
+
   fetch(`${url}/sites`, {
     method: 'POST',
     headers: {
@@ -228,33 +234,157 @@ newSiteForm.addEventListener('submit', event => {
 })
 
 
+// update site
+allSitesCollection.addEventListener
+  ('click', event => {
+    if (event.target.matches('button#update-site-button')) {
+
+      console.log('sites clicked')
+
+      const updateSiteForm = document.querySelector("form#update-site-form");
+      updateSiteForm.dataset.id = event.target.dataset.id
+
+
+      // using the dataset id, we fetch the info required to fill in the update itinerary form
+      fetch(`${url}/sites/${event.target.dataset.id}`)
+        .then(response => response.json())
+        .then(data => {
+          updateSiteForm[0].value = data.name
+          updateSiteForm[1].value = data.photo_url
+          updateSiteForm[2].value = data.description
+          updateSiteForm[3].value = data.location
+          updateSiteForm[4].value = data.architectural_style
+        })
+
+      const newItineraryContainer = document.querySelector(".update-site-forms");
+
+
+      // hide & seek with the form
+      addSite = !addSite;
+      if (addSite) {
+        newItineraryContainer.style.display = "none";
+      } else {
+        newItineraryContainer.style.display = "block";
+      }
+    }
+  })
+
+
+
+
+// function to render sites
+function renderSite(site) {
+  
+
+  
+    siteDiv = document.querySelector('div#sites')
+    div = document.createElement('div')
+    listDiv = document.createElement('listDiv')
+    siteHtml = `${site.name}`
+    div.dataset.id = site.id
+    div.id = "individual-site-card"
+    div.classList.add('card')
+    div.classList.add('banner')
+    div.innerHTML = `
+    <img src=${site.photo_url}/>
+      <h2>${site.name}</h2>
+      <h3>${site.description}<h3>
+      <h4>${site.location}<h4>
+      <h5>${site.architectural_style}<h5>
+      
+      `
+  
+  select = document.createElement("select");
+  frag = document.createDocumentFragment(),
+  
+    fetch(`${url}/itineraries`)
+    .then(res => res.json())
+    .then(sites => {
+        sites.forEach(itineraries => {
+        select.options.add( new Option(itineraries.name) );  
+      })
+      frag.append(select);
+      listDiv.append(frag);
+      })
+  
+        
+  
+      const updateSiteButton = document.createElement('button')
+      updateSiteButton.textContent = "Update Site"
+      updateSiteButton.id = "update-site-button"
+      updateSiteButton.dataset.id = site.id
+  
+      const addSiteToItineraryButton = document.createElement('button')
+      addSiteToItineraryButton.textContent = "Add Site To Itinerary"
+      addSiteToItineraryButton.id = "add-site-to-itinerary-button"
+      addSiteToItineraryButton.dataset.id = site.id
+  
+  
+
+  
+  div.append(updateSiteButton)
+  div.append(addSiteToItineraryButton)
+  div.append(listDiv)
+  siteDiv.append(div)
+
+  
+  
+  }
+
+
+
+
+
+
+
 
 //// ITINERARIES ////
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  const addBtn = document.querySelector("#show-itinerary-btn");
-  const newItineraryContainer = document.querySelector(".itineraries");
-
+  const showItinerariesButton = document.querySelector("#myTopnav > a.active");
+  const allItinerariesCollection = document.querySelector(".itineraries");
+  const showNewItineraryFormButton = document.querySelector("#myTopnav > a:nth-child(2)");
+  const newItineraryFormContainer = document.querySelector(".new-itinerary-form");
 
   const itineraryForms = document.querySelector(".update-itinerary-forms");
 
-  newItineraryContainer.style.display = "none";
+  allItinerariesCollection.style.display = "none";
   itineraryForms.style.display = "none";
+  newItineraryFormContainer.style.display = "none";
+
+  siteUpdateFormContainer.style.display = "none";
+  newSiteFormContainer.style.display = "none";
 
   
 
-  addBtn.addEventListener("click", () => {
+  showItinerariesButton.addEventListener("click", () => {
     // hide & seek with the form
     
 
     addSite = !addSite;
     if (addSite) {
-      newItineraryContainer.style.display = "none";
+      allItinerariesCollection.style.display = "none";
     } else {
-      newItineraryContainer.style.display = "block";
+      allItinerariesCollection.style.display = "block";
     }
   });
+
+  showNewItineraryFormButton.addEventListener("click", () => {
+    // hide & seek with the form
+    
+
+    addSite = !addSite;
+    if (addSite) {
+      newItineraryFormContainer.style.display = "none";
+    } else {
+      newItineraryFormContainer.style.display = "block";
+    }
+  });
+
+
+
+  
 });
 
 
@@ -292,8 +422,27 @@ function renderItinerary(itinerary) {
   itinerarySites = (itinerary.sites)
 
 
+  // create drop down
+  listDiv = document.createElement('listDiv')
+  select = document.createElement("select");
+  frag = document.createDocumentFragment(),
+  
+    fetch(`${url}/sites`)
+    .then(res => res.json())
+    .then(sites => {
+        sites.forEach(sites => {
+        select.options.add( new Option(sites.name) );  
+      })
+      frag.append(select);
+      listDiv.append(frag);
+      })
+
+
+
+
   div = document.createElement('div')
   div.id = "itinerary-card"
+
   updateButton = document.createElement('button')
   updateButton.textContent = "Update Itinerary"
   updateButton.id = "update-itinerary-button"
@@ -304,15 +453,19 @@ function renderItinerary(itinerary) {
   deleteCardButton.id = "delete-itinerary-card-button"
   deleteCardButton.dataset.id = itinerary.id
 
+  const addSiteFromDropdownButton = document.createElement('button')
+  addSiteFromDropdownButton.textContent = "Add Site To Itinerary"
+  addSiteFromDropdownButton.id = "add-site-from-dropdown-button"
+  addSiteFromDropdownButton.dataset.id = itinerary.id
+
   div.dataset.id = itinerary.id
   div.classList.add('card')
   div.innerHTML = `<h2>${itinerary.name}</h2>
-  <br>
-  <h3>Description: ${itinerary.description}
-  <br>
-  <br>
-  Date: ${itinerary.date}
-  </h3>
+
+  <h3>Description: ${itinerary.description}</h3>
+
+  <h4> Date: ${itinerary.date} </h3>
+ 
 `
 
 
@@ -339,6 +492,8 @@ function renderItinerary(itinerary) {
   itineraryDiv.append(div)
   div.append(updateButton)
   div.append(deleteCardButton)
+  div.append(listDiv)
+  div.append(addSiteFromDropdownButton)
 }
 
 // delete specific site
@@ -375,13 +530,12 @@ itinerariesCollection.addEventListener
 
       const newItineraryContainer = document.querySelector(".update-itinerary-forms");
 
-      newItineraryContainer.style.display = "none";
       // hide & seek with the form
       addSite = !addSite;
       if (addSite) {
-        newItineraryContainer.style.display = "block";
-      } else {
         newItineraryContainer.style.display = "none";
+      } else {
+        newItineraryContainer.style.display = "block";
       }
     }
 
@@ -394,6 +548,43 @@ itinerariesCollection.addEventListener
         method: 'DELETE'
       },
       )
+    }
+
+
+
+
+    else if (event.target.matches('button#add-site-from-dropdown-button')) {
+
+
+      var closestElement = targetElement.closest('#listDiv');
+
+      console.log(closestElement)
+
+      
+
+     const  newSite = {name: "test"}
+
+      // using the dataset id, we fetch the info required to fill in the update itinerary form
+      fetch(`${url}/itineraries/${event.target.select.value}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(newSite)
+      })
+    
+    
+        // .then(response => response.json())
+        // .then(data => {
+        //   const selectedCard = document.querySelector(`div#itinerary-card[data-id='${cardID}']`)
+        //   console.log(selectedCard)
+        //   const name = selectedCard.querySelector('h2')
+        //   const description = selectedCard.querySelector('h3')
+        //   const date = selectedCard.querySelector('h4')
+        //   name.textContent = data.name
+        //   description.textContent = data.description
+        //   date.textContent = data.date
+        // })
     }
   })
 
@@ -424,23 +615,15 @@ updateItineraryForm.addEventListener('submit', event => {
   })
 
 
-
     .then(response => response.json())
     .then(data => {
       const selectedCard = document.querySelector(`div#itinerary-card[data-id='${cardID}']`)
       console.log(selectedCard)
-      const header = selectedCard.querySelector('h2')
+      const name = selectedCard.querySelector('h2')
       const description = selectedCard.querySelector('h3')
-      header.textContent = data.name
+      const date = selectedCard.querySelector('h4')
+      name.textContent = data.name
       description.textContent = data.description
-    })
-
-
-
-  // replace current card data with new updated card data
-  fetch(`${url}/itineraries/${event.target.dataset.id}`)
-    .then(response => response.json())
-    .then(data => {
-      // renderItinerary(data)
+      date.textContent = data.date
     })
 })
