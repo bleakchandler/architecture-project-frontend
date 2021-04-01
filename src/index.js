@@ -1,3 +1,4 @@
+//// GLOBAL VARIABLES ////
 let addSite = true;
 const updateSiteForm = document.querySelector('form#update-site-form')
 const newSiteForm = document.querySelector('form#create-site-form')
@@ -10,25 +11,15 @@ const userSignInForm = document.querySelector('form#user-sign-in-form')
 const url = "http://localhost:3000"
 const userInfo = document.querySelector('div#myTopnav')
 const allSitesCollection = document.querySelector('div#sites')
-
 const siteUpdateFormContainer = document.querySelector('body > div.update-site-forms')
 const newSiteFormContainer = document.querySelector('body > div.new-site-form')
 
-
-
-
-
 //// USERS ////
-
-
 // hide all elements
 const sitesDiv = document.querySelector('div#sites')
 const buttonsDiv = document.querySelector('div#buttons')
 const usersDiv = document.querySelector('.users')
-
-
 sitesDiv.style.visibility = 'hidden';
-
 
 // signup form event listener
 userSignupForm.addEventListener('submit', event => {
@@ -48,10 +39,9 @@ userSignupForm.addEventListener('submit', event => {
   })
     .then(response => response.json())
     .then(data => renderUser(data),
-    usersDiv.style.visibility = 'hidden',
-    sitesDiv.style.visibility = 'visible')
+      usersDiv.style.visibility = 'hidden',
+      sitesDiv.style.visibility = 'visible')
 })
-
 
 // user sign-in form
 userSignInForm.addEventListener('submit', event => {
@@ -64,75 +54,50 @@ userSignInForm.addEventListener('submit', event => {
   }
 
   fetch(`${url}/users`)
-  .then(response => response.json())
-  .then(data => data.forEach( data => {
-    if (data.name == userNameValue) {
-      renderUser(data),
-      usersDiv.style.visibility = 'hidden',
-      sitesDiv.style.visibility = 'visible'
-      
-    }
-  },
+    .then(response => response.json())
+    .then(data => data.forEach(data => {
+      if (data.name == userNameValue) {
+        renderUser(data),
+          usersDiv.style.visibility = 'hidden',
+          sitesDiv.style.visibility = 'visible'
 
-
-  fetch(`${url}/itineraries`)
-  .then(response => response.json())
-  .then(data => {
-    data.forEach( data => {
-      if (data.user_id == userInfo.dataset.id) {
-       renderItinerary(data)
       }
-    })
-  })
-  ))
-})
+    },
 
+      fetch(`${url}/itineraries`)
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(data => {
+            if (data.user_id == userInfo.dataset.id) {
+              renderItinerary(data)
+            }
+          })
+        })
+    ))
+})
 
 // display user
 function renderUser(userName) {
   userDiv = document.querySelector('div#myTopnav')
   div = document.createElement('div')
-
   displayUser = document.createElement('p')
   displayUser = userName.name
   div.id = "user-info"
   userDiv.dataset.id = userName.id
-
   div.innerHTML = `Welcome, ${displayUser}`
-
   displayUser.app
-
-  // userDiv.append(div)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //// SITES ////
 
 // fetch site date
-
-
 fetch(`${url}/sites`)
-.then(response => response.json())
-.then(sites => {
-  sites.forEach(data => {
-    renderSite(data)
+  .then(response => response.json())
+  .then(sites => {
+    sites.forEach(data => {
+      renderSite(data)
+    })
   })
-}) 
-
 
 // hide/show site forms
 document.addEventListener("DOMContentLoaded", () => {
@@ -152,12 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
 // update Site Form
 updateSiteForm.addEventListener('submit', event => {
   event.preventDefault()
-
-  //gives internal server error but still works?
 
   newName = event.target.name.value
   newImage = event.target.photoUrl.value
@@ -184,8 +146,8 @@ updateSiteForm.addEventListener('submit', event => {
     body: JSON.stringify(newSiteData)
   })
 
-  .then(response => response.json())
-  .then(data => {
+    .then(response => response.json())
+    .then(data => {
       const selectedCard = document.querySelector(`div#individual-site-card[data-id='${cardID}']`)
       console.log(selectedCard)
       const name = selectedCard.querySelector('h2')
@@ -220,8 +182,6 @@ newSiteForm.addEventListener('submit', event => {
     architectural_style: newStyle
   }
 
-
-
   fetch(`${url}/sites`, {
     method: 'POST',
     headers: {
@@ -233,17 +193,63 @@ newSiteForm.addEventListener('submit', event => {
     .then(data => renderSite(data))
 })
 
+// function to render sites
+function renderSite(site) {
+  siteDiv = document.querySelector('div#sites')
+  div = document.createElement('div')
+  listDiv = document.createElement('listDiv')
+  siteHtml = `${site.name}`
+  div.dataset.id = site.id
+  div.id = "individual-site-card"
+  div.classList.add('card')
+  div.classList.add('banner')
+  div.innerHTML = `
+    <img src=${site.photo_url}/>
+    <h2>${site.name}</h2>
+    <h3>${site.description}</h3>
+    <h4>${site.location}</h4>
+    <h5>${site.architectural_style}</h5>
+    `
+
+  select = document.createElement("select");
+
+  fetch(`${url}/itineraries`)
+    .then(res => res.json())
+    .then(itinerary => {
+      itinerary.forEach(itinerary => {
+        console.log(itinerary.name)
+        let option = document.createElement('option')
+        option.textContent = itinerary.name
+        console.log(option)
+        select.appendChild(option)
+      })
+    })
+
+  listDiv.append(select);
+  console.log(listDiv)
+
+  const updateSiteButton = document.createElement('button')
+  updateSiteButton.textContent = "Update Site"
+  updateSiteButton.id = "update-site-button"
+  updateSiteButton.dataset.id = site.id
+
+  const addSiteToItineraryButton = document.createElement('button')
+  addSiteToItineraryButton.textContent = "Add Site To Itinerary"
+  addSiteToItineraryButton.id = "add-site-to-itinerary-button"
+  addSiteToItineraryButton.dataset.id = site.id
+
+  div.append(updateSiteButton)
+  div.append(addSiteToItineraryButton)
+  div.append(listDiv)
+  siteDiv.append(div)
+}
 
 // update site
 allSitesCollection.addEventListener
   ('click', event => {
     if (event.target.matches('button#update-site-button')) {
-
-      console.log('sites clicked')
-
       const updateSiteForm = document.querySelector("form#update-site-form");
       updateSiteForm.dataset.id = event.target.dataset.id
-
 
       // using the dataset id, we fetch the info required to fill in the update itinerary form
       fetch(`${url}/sites/${event.target.dataset.id}`)
@@ -258,7 +264,6 @@ allSitesCollection.addEventListener
 
       const newItineraryContainer = document.querySelector(".update-site-forms");
 
-
       // hide & seek with the form
       addSite = !addSite;
       if (addSite) {
@@ -270,97 +275,22 @@ allSitesCollection.addEventListener
   })
 
 
-
-
-// function to render sites
-function renderSite(site) {
-  
-
-  
-    siteDiv = document.querySelector('div#sites')
-    div = document.createElement('div')
-    listDiv = document.createElement('listDiv')
-    siteHtml = `${site.name}`
-    div.dataset.id = site.id
-    div.id = "individual-site-card"
-    div.classList.add('card')
-    div.classList.add('banner')
-    div.innerHTML = `
-      <img src=${site.photo_url}/>
-      <h2>${site.name}</h2>
-      <h3>${site.description}</h3>
-      <h4>${site.location}</h4>
-      <h5>${site.architectural_style}</h5>
-      `
-  
-  select = document.createElement("select");
-  frag = document.createDocumentFragment(),
-  
-    fetch(`${url}/itineraries`)
-    .then(res => res.json())
-    .then(sites => {
-        sites.forEach(itineraries => {
-        select.options.add( new Option(itineraries.name) );  
-      })
-      frag.append(select);
-      listDiv.append(frag);
-      })
-  
-        
-  
-      const updateSiteButton = document.createElement('button')
-      updateSiteButton.textContent = "Update Site"
-      updateSiteButton.id = "update-site-button"
-      updateSiteButton.dataset.id = site.id
-  
-      const addSiteToItineraryButton = document.createElement('button')
-      addSiteToItineraryButton.textContent = "Add Site To Itinerary"
-      addSiteToItineraryButton.id = "add-site-to-itinerary-button"
-      addSiteToItineraryButton.dataset.id = site.id
-  
-  
-
-  
-  div.append(updateSiteButton)
-  div.append(addSiteToItineraryButton)
-  div.append(listDiv)
-  siteDiv.append(div)
-
-  
-  
-  }
-
-
-
-
-
-
-
-
 //// ITINERARIES ////
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const showItinerariesButton = document.querySelector("#myTopnav > a.active");
   const allItinerariesCollection = document.querySelector(".itineraries");
   const showNewItineraryFormButton = document.querySelector("#myTopnav > a:nth-child(2)");
   const newItineraryFormContainer = document.querySelector(".new-itinerary-form");
-
   const itineraryForms = document.querySelector(".update-itinerary-forms");
 
   allItinerariesCollection.style.display = "none";
   itineraryForms.style.display = "none";
   newItineraryFormContainer.style.display = "none";
-
   siteUpdateFormContainer.style.display = "none";
   newSiteFormContainer.style.display = "none";
 
-  
-
   showItinerariesButton.addEventListener("click", () => {
     // hide & seek with the form
-    
-
     addSite = !addSite;
     if (addSite) {
       allItinerariesCollection.style.display = "none";
@@ -371,8 +301,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   showNewItineraryFormButton.addEventListener("click", () => {
     // hide & seek with the form
-    
-
     addSite = !addSite;
     if (addSite) {
       newItineraryFormContainer.style.display = "none";
@@ -380,12 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
       newItineraryFormContainer.style.display = "block";
     }
   });
-
-
-
-  
 });
-
 
 // form to add new itinerary
 newItineraryForm.addEventListener('submit', event => {
@@ -414,30 +337,25 @@ newItineraryForm.addEventListener('submit', event => {
     .then(data => renderItinerary(data))
 })
 
-
 // function to render itinerary
 function renderItinerary(itinerary) {
   itineraryDiv = document.querySelector('div#itineraries')
   itinerarySites = (itinerary.sites)
 
-
   // create drop down
   listDiv = document.createElement('listDiv')
   select = document.createElement("select");
-  frag = document.createDocumentFragment(),
-  
-    fetch(`${url}/sites`)
+
+  fetch(`${url}/sites`)
     .then(res => res.json())
     .then(sites => {
-        sites.forEach(sites => {
-        select.options.add( new Option(sites.name) );  
+      sites.forEach(site => {
+        let option = document.createElement('option')
+        option.textContent = site.name
+        select.append(option)
       })
-      frag.append(select);
-      listDiv.append(frag);
-      })
-
-
-
+      listDiv.append(select);
+    })
 
   div = document.createElement('div')
   div.id = "itinerary-card"
@@ -459,14 +377,11 @@ function renderItinerary(itinerary) {
 
   div.dataset.id = itinerary.id
   div.classList.add('card')
-  div.innerHTML = `<h2>${itinerary.name}</h2>
-
+  div.innerHTML = `
+  <h2>${itinerary.name}</h2>
   <h3>Description: ${itinerary.description}</h3>
-
   <h4> Date: ${itinerary.date} </h4>
- 
 `
-
 
   // function to show itinerary sites within the itinerary
   itinerarySites.forEach(function (element) {
@@ -484,7 +399,6 @@ function renderItinerary(itinerary) {
     siteImage.src = element.photo_url
 
     div.append(siteName)
-    // div.append(siteImage)
     siteName.append(deleteSiteButton)
 
   })
@@ -516,7 +430,6 @@ itinerariesCollection.addEventListener
       const updateItineraryForm = document.querySelector("form#update-itinerary-form");
       updateItineraryForm.dataset.id = event.target.dataset.id
 
-
       // using the dataset id, we fetch the info required to fill in the update itinerary form
       fetch(`${url}/itineraries/${event.target.dataset.id}`)
         .then(response => response.json())
@@ -526,7 +439,6 @@ itinerariesCollection.addEventListener
           updateItineraryForm[1].value = data.date
           updateItineraryForm[2].value = data.description
         })
-
 
       const newItineraryContainer = document.querySelector(".update-itinerary-forms");
 
@@ -550,19 +462,11 @@ itinerariesCollection.addEventListener
       )
     }
 
-
-
-
     else if (event.target.matches('button#add-site-from-dropdown-button')) {
 
-
       var closestElement = targetElement.closest('#listDiv');
-
       console.log(closestElement)
-
-      
-
-     const  newSite = {name: "test"}
+      const newSite = { name: "test" }
 
       // using the dataset id, we fetch the info required to fill in the update itinerary form
       fetch(`${url}/itineraries/${event.target.select.value}`, {
@@ -572,27 +476,12 @@ itinerariesCollection.addEventListener
         },
         body: JSON.stringify(newSite)
       })
-    
-    
-        // .then(response => response.json())
-        // .then(data => {
-        //   const selectedCard = document.querySelector(`div#itinerary-card[data-id='${cardID}']`)
-        //   console.log(selectedCard)
-        //   const name = selectedCard.querySelector('h2')
-        //   const description = selectedCard.querySelector('h3')
-        //   const date = selectedCard.querySelector('h4')
-        //   name.textContent = data.name
-        //   description.textContent = data.description
-        //   date.textContent = data.date
-        // })
     }
   })
 
 // update current itinerary information
 updateItineraryForm.addEventListener('submit', event => {
   event.preventDefault()
-
-  //gives internal server error but still works?
 
   updateName = event.target.name.value
   updateDescription = event.target.description.value
@@ -605,7 +494,6 @@ updateItineraryForm.addEventListener('submit', event => {
   }
 
   const cardID = (event.target.dataset.id)
-
   fetch(`${url}/itineraries/${event.target.dataset.id}`, {
     method: 'PATCH',
     headers: {
@@ -613,8 +501,6 @@ updateItineraryForm.addEventListener('submit', event => {
     },
     body: JSON.stringify(newItineraryData)
   })
-
-
     .then(response => response.json())
     .then(data => {
       const selectedCard = document.querySelector(`div#itinerary-card[data-id='${cardID}']`)
