@@ -59,7 +59,6 @@ userSignInForm.addEventListener('submit', event => {
         renderUser(data),
           usersDiv.style.visibility = 'hidden',
           sitesDiv.style.visibility = 'visible'
-
       }
     },
 
@@ -219,6 +218,8 @@ function renderSite(site) {
       })
     })
 
+  select.id = 'itinerary-dropdown-options'
+  select.dataset.id = div.dataset.id
   listDiv.append(select);
 
   const updateSiteButton = document.createElement('button')
@@ -268,19 +269,31 @@ allSitesCollection.addEventListener
 
     // add site to itinerary from dropdown
     else if (event.target.matches('button#add-site-to-itinerary-button')) {
-      console.log('worked!')
-      var closest = element.closest("#individual-site-card > listdiv > select");
-      console.log(closest)
-    
+      const cardDropdown = document.querySelector(`#itinerary-dropdown-options[data-id='${event.target.dataset.id}']`)
+      let result = cardDropdown.options[cardDropdown.selectedIndex].value;
 
-      // using the dataset id, we fetch the info required to fill in the update itinerary form
-      // fetch(`${url}/itineraries/${event.target.select.value}`, {
-      //   method: 'PATCH',
-      //   headers: {
-      //     'Content-type': 'application/json'
-      //   },
-      //   body: JSON.stringify(newSite)
-      // })
+      fetch(`${url}/itineraries`)
+        .then(response => response.json())
+        .then(data => data.forEach(data => {
+          // console.log(data.name)
+          if (data.name == result) {
+            const siteIDForItinerarySiteForm = data.id
+            newItinerarySite = {
+              name: 'New Itinerary Site',
+              site_id: event.target.dataset.id,
+              itinerary_id: siteIDForItinerarySiteForm
+            }
+
+            //using the dataset id, we fetch the info required to fill in the update itinerary form
+            fetch(`${url}/itinerary_sites`, {
+              method: 'POST',
+              headers: {
+                'Content-type': 'application/json'
+              },
+              body: JSON.stringify(newItinerarySite)
+            })
+          }
+        }))
     }
   })
 
@@ -416,7 +429,6 @@ itinerariesCollection.addEventListener
       fetch(`${url}/itineraries/${event.target.dataset.id}`)
         .then(response => response.json())
         .then(data => {
-
           updateItineraryForm[0].value = data.name
           updateItineraryForm[1].value = data.date
           updateItineraryForm[2].value = data.description
