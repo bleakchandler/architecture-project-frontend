@@ -101,8 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.querySelector("#myTopnav > a:nth-child(3)");
   const siteFormContainer = document.querySelector(".new-site-form");
 
-  // siteFormContainer.style.display = "none"
-
   addBtn.addEventListener("click", () => {
     // hide & seek with the form
     addSite = !addSite;
@@ -211,7 +209,7 @@ function renderSite(site) {
     .then(res => res.json())
     .then(itinerary => {
       itinerary.forEach(itinerary => {
-        var option = document.createElement("option");
+        const option = document.createElement("option");
         option.text = itinerary.name
         option.id = itinerary.id
         select.add(option)
@@ -271,7 +269,7 @@ allSitesCollection.addEventListener
     else if (event.target.matches('button#add-site-to-itinerary-button')) {
       const cardDropdown = document.querySelector(`#itinerary-dropdown-options[data-id='${event.target.dataset.id}']`)
       let resultID = cardDropdown.options[cardDropdown.selectedIndex].id;
-      let resultName = cardDropdown.options[cardDropdown.selectedIndex].value;
+      // let resultName = cardDropdown.options[cardDropdown.selectedIndex].value;
 
       newItinerarySite = {
         name: 'New Itinerary Site',
@@ -279,13 +277,7 @@ allSitesCollection.addEventListener
         itinerary_id: resultID
       }
 
-        // remove current itineraries from web page to be replaced with updated
-        const li = document.querySelectorAll('#itinerary-card')
-        console.log(li)
-        li.forEach(function( node ) {
-        node.parentNode.removeChild( node );
-      });
-
+      // remove current itineraries from web page to be replaced with updated
       //using the dataset id, we fetch the info required to fill in the update itinerary form
       fetch(`${url}/itinerary_sites`, {
         method: 'POST',
@@ -294,17 +286,36 @@ allSitesCollection.addEventListener
         },
         body: JSON.stringify(newItinerarySite)
       })
-      fetch(`${url}/itineraries`)
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(data => {
-          if (data.user_id == userInfo.dataset.id) {    
-            renderItinerary(data)
-          }
-        })
-      })
     }
+
+    const elementToRemove = document.querySelectorAll('#itinerary-card')
+    console.log(elementToRemove)
+    elementToRemove.forEach(function (node) {
+      node.parentNode.removeChild(node);
+    });
+
+
+    setTimeout(() => {
+      fetch(`${url}/itineraries`)
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(data => {
+            if (data.user_id == userInfo.dataset.id) {
+              console.log(data)
+              renderItinerary(data)
+            }
+          })
+        })
+    }, 2000);
   })
+
+// https://www.sitepoint.com/delay-sleep-pause-wait/
+// (async () => {
+//   const res = await fetch(`https://api.github.com/users/jameshibbard`);
+//   const json = await res.json();
+//   console.log(json.public_repos);
+//   console.log("Hello!");
+// })();
 
 //// ITINERARIES ////
 document.addEventListener("DOMContentLoaded", () => {
@@ -366,12 +377,29 @@ newItineraryForm.addEventListener('submit', event => {
   })
     .then(response => response.json())
     .then(data => renderItinerary(data))
+
+  const elementToRemove = document.querySelectorAll('#individual-site-card')
+  console.log(elementToRemove)
+  elementToRemove.forEach(function (node) {
+    node.parentNode.removeChild(node);
+  })
+
+  setTimeout(() => {
+    fetch(`${url}/sites`)
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(data => {
+          renderSite(data)
+
+        })
+      })
+  }, 2000);
 })
 
 // function to render itinerary
 function renderItinerary(itinerary) {
   itineraryDiv = document.querySelector('div#itineraries')
-  itinerarySites = (itinerary.sites)
+  itinerarySites = (itinerary.itinerary_sites)
 
   div = document.createElement('div')
   div.id = "itinerary-card"
@@ -394,17 +422,18 @@ function renderItinerary(itinerary) {
   <h4> Date: ${itinerary.date} </h4>
 `
   // function to show itinerary sites within the itinerary
-  itinerarySites.forEach(function (element) {
+  itinerarySites.forEach(function (itinerary_site) {
+    console.log(itinerary_site.site.name)
     const siteName = document.createElement('li')
     const deleteSiteButton = document.createElement('button')
     const siteImage = document.createElement('img')
 
-    siteName.innerHTML = element.name
-    siteName.dataset.id = element.id
+    siteName.innerHTML = itinerary_site.site.name
+    siteName.dataset.id = itinerary_site.id
     deleteSiteButton.textContent = "Delete"
     deleteSiteButton.id = "itinerary-site-delete-button"
-    deleteSiteButton.dataset.id = element.id
-    siteImage.src = element.photo_url
+    deleteSiteButton.dataset.id = itinerary_site.id
+    siteImage.src = itinerary_site.site.photo_url
 
     div.append(siteName)
     siteName.append(deleteSiteButton)
