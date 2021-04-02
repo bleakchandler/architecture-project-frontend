@@ -39,21 +39,12 @@ html  *
 }
     
 
-
-
 body {
   text-align: center;
 }
 form {
   display: inline-block;
 }
-
-/* updateItineraryForm[0].src = data.photo_url
-          updateItineraryForm[1].value = data.name
-          updateItineraryForm[2].value = data.date
-          updateItineraryForm[3].value = data.description
-          updateItineraryForm[4].value = data.architectural_style */
-
 
 /* Add a black background color to the top navigation */
 .topnav {
@@ -90,8 +81,6 @@ form {
   display: none;
 }
 
-
-
 .submit {
 	border-radius: px;
 	border: 1px solid #186998;
@@ -106,7 +95,6 @@ form {
   
 }
 
-
 .input-text {
 	border-radius: px;
 	border: 1px solid #186998;
@@ -115,8 +103,7 @@ form {
 	font-weight: bold;
 	padding: 12px 45px;
 	letter-spacing: 1px;
-	transition: transform 80ms ease-in;
-  
+	transition: transform 80ms ease-in;  
 }
 
 * {box-sizing:border-box}
