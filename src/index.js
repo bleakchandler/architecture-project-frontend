@@ -161,7 +161,6 @@ updateSiteForm.addEventListener('submit', event => {
 
 // create new site
 newSiteForm.addEventListener('submit', event => {
-
   event.preventDefault()
 
   newName = event.target.name.value
@@ -280,7 +279,12 @@ allSitesCollection.addEventListener
         itinerary_id: resultID
       }
 
-        console.log(event.target.parentNode)
+        // remove current itineraries from web page to be replaced with updated
+        const li = document.querySelectorAll('#itinerary-card')
+        console.log(li)
+        li.forEach(function( node ) {
+        node.parentNode.removeChild( node );
+      });
 
       //using the dataset id, we fetch the info required to fill in the update itinerary form
       fetch(`${url}/itinerary_sites`, {
@@ -290,22 +294,14 @@ allSitesCollection.addEventListener
         },
         body: JSON.stringify(newItinerarySite)
       })
-
+      fetch(`${url}/itineraries`)
       .then(response => response.json())
       .then(data => {
-        const itinerary_site = document.querySelector(`div#itinerary-card[data-id='${resultID}']`)
-      
-        const siteName = document.createElement('li')
-        const deleteSiteButton = document.createElement('button')
-    
-        siteName.innerHTML = data.name
-        siteName.dataset.id = data.id
-        deleteSiteButton.textContent = "Delete"
-        deleteSiteButton.id = "itinerary-site-delete-button"
-        deleteSiteButton.dataset.id = data.id
-
-        siteName.append(deleteSiteButton)
-        itinerary_site.append(siteName)
+        data.forEach(data => {
+          if (data.user_id == userInfo.dataset.id) {    
+            renderItinerary(data)
+          }
+        })
       })
     }
   })
