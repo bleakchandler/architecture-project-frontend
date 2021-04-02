@@ -39,7 +39,7 @@ userSignupForm.addEventListener('submit', event => {
   })
     .then(response => response.json())
     .then(data => renderUser(data),
-      usersDiv.style.visibility = 'hidden',
+      usersDiv.style.display = 'none',
       sitesDiv.style.visibility = 'visible')
 })
 
@@ -57,7 +57,7 @@ userSignInForm.addEventListener('submit', event => {
     .then(data => data.forEach(data => {
       if (data.name == userNameValue) {
         renderUser(data),
-          usersDiv.style.visibility = 'hidden',
+          usersDiv.style.display = 'none',
           sitesDiv.style.visibility = 'visible'
       }
     },
@@ -98,7 +98,7 @@ fetch(`${url}/sites`)
 
 // hide/show site forms
 document.addEventListener("DOMContentLoaded", () => {
-  const addBtn = document.querySelector("#myTopnav > a:nth-child(3)");
+  const addBtn = document.querySelector("#myTopnav > a:nth-child(4)");
   const siteFormContainer = document.querySelector(".new-site-form");
 
   addBtn.addEventListener("click", () => {
@@ -131,7 +131,6 @@ updateSiteForm.addEventListener('submit', event => {
   }
 
   const cardID = (event.target.dataset.id)
-  console.log(cardID)
 
   fetch(`${url}/sites/${cardID}`, {
     method: 'PATCH',
@@ -143,7 +142,6 @@ updateSiteForm.addEventListener('submit', event => {
     .then(response => response.json())
     .then(data => {
       const selectedCard = document.querySelector(`div#individual-site-card[data-id='${cardID}']`)
-      console.log(selectedCard)
       const name = selectedCard.querySelector('h2')
       const description = selectedCard.querySelector('h3')
       const location = selectedCard.querySelector('h4')
@@ -292,8 +290,8 @@ allSitesCollection.addEventListener
     console.log(elementToRemove)
     elementToRemove.forEach(function (node) {
       node.parentNode.removeChild(node);
+      console.log('worked!')
     });
-
 
     setTimeout(() => {
       fetch(`${url}/itineraries`)
@@ -301,7 +299,6 @@ allSitesCollection.addEventListener
         .then(data => {
           data.forEach(data => {
             if (data.user_id == userInfo.dataset.id) {
-              console.log(data)
               renderItinerary(data)
             }
           })
@@ -319,9 +316,9 @@ allSitesCollection.addEventListener
 
 //// ITINERARIES ////
 document.addEventListener("DOMContentLoaded", () => {
-  const showItinerariesButton = document.querySelector("#myTopnav > a.active");
+  const showItinerariesButton = document.querySelector("#myTopnav > a:nth-child(2)");
   const allItinerariesCollection = document.querySelector(".itineraries");
-  const showNewItineraryFormButton = document.querySelector("#myTopnav > a:nth-child(2)");
+  const showNewItineraryFormButton = document.querySelector("#myTopnav > a:nth-child(3)");
   const newItineraryFormContainer = document.querySelector(".new-itinerary-form");
   const itineraryForms = document.querySelector(".update-itinerary-forms");
 
@@ -423,7 +420,6 @@ function renderItinerary(itinerary) {
 `
   // function to show itinerary sites within the itinerary
   itinerarySites.forEach(function (itinerary_site) {
-    console.log(itinerary_site.site.name)
     const siteName = document.createElement('li')
     const deleteSiteButton = document.createElement('button')
     const siteImage = document.createElement('img')
@@ -487,7 +483,6 @@ itinerariesCollection.addEventListener
     else if (event.target.matches('button#delete-itinerary-card-button')) {
       const div = event.target.closest('div#itinerary-card')
       div.remove()
-      console.log(event.target.dataset.id)
       fetch(`${url}/itineraries/${event.target.dataset.id}`, {
         method: 'DELETE'
       })
@@ -519,7 +514,6 @@ updateItineraryForm.addEventListener('submit', event => {
     .then(response => response.json())
     .then(data => {
       const selectedCard = document.querySelector(`div#itinerary-card[data-id='${cardID}']`)
-      console.log(selectedCard)
       const name = selectedCard.querySelector('h2')
       const description = selectedCard.querySelector('h3')
       const date = selectedCard.querySelector('h4')
@@ -528,3 +522,17 @@ updateItineraryForm.addEventListener('submit', event => {
       date.textContent = data.date
     })
 })
+
+var slideIndex = 0;
+showSlides();
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}
+  slides[slideIndex-1].style.display = "block";
+  setTimeout(showSlides, 2000); // Change image every 2 seconds
+}
