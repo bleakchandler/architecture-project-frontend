@@ -214,6 +214,7 @@ function renderSite(site) {
       itinerary.forEach(itinerary => {
         var option = document.createElement("option");
         option.text = itinerary.name
+        option.id = itinerary.id
         select.add(option)
       })
     })
@@ -270,30 +271,42 @@ allSitesCollection.addEventListener
     // add site to itinerary from dropdown
     else if (event.target.matches('button#add-site-to-itinerary-button')) {
       const cardDropdown = document.querySelector(`#itinerary-dropdown-options[data-id='${event.target.dataset.id}']`)
-      let result = cardDropdown.options[cardDropdown.selectedIndex].value;
+      let resultID = cardDropdown.options[cardDropdown.selectedIndex].id;
+      let resultName = cardDropdown.options[cardDropdown.selectedIndex].value;
 
-      fetch(`${url}/itineraries`)
-        .then(response => response.json())
-        .then(data => data.forEach(data => {
-          // console.log(data.name)
-          if (data.name == result) {
-            const siteIDForItinerarySiteForm = data.id
-            newItinerarySite = {
-              name: 'New Itinerary Site',
-              site_id: event.target.dataset.id,
-              itinerary_id: siteIDForItinerarySiteForm
-            }
+      newItinerarySite = {
+        name: 'New Itinerary Site',
+        site_id: event.target.dataset.id,
+        itinerary_id: resultID
+      }
 
-            //using the dataset id, we fetch the info required to fill in the update itinerary form
-            fetch(`${url}/itinerary_sites`, {
-              method: 'POST',
-              headers: {
-                'Content-type': 'application/json'
-              },
-              body: JSON.stringify(newItinerarySite)
-            })
-          }
-        }))
+        console.log(event.target.parentNode)
+
+      //using the dataset id, we fetch the info required to fill in the update itinerary form
+      fetch(`${url}/itinerary_sites`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(newItinerarySite)
+      })
+
+      .then(response => response.json())
+      .then(data => {
+        const itinerary_site = document.querySelector(`div#itinerary-card[data-id='${resultID}']`)
+      
+        const siteName = document.createElement('li')
+        const deleteSiteButton = document.createElement('button')
+    
+        siteName.innerHTML = data.name
+        siteName.dataset.id = data.id
+        deleteSiteButton.textContent = "Delete"
+        deleteSiteButton.id = "itinerary-site-delete-button"
+        deleteSiteButton.dataset.id = data.id
+
+        siteName.append(deleteSiteButton)
+        itinerary_site.append(siteName)
+      })
     }
   })
 
